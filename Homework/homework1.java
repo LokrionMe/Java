@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class homework1 {
     public static void main(String[] args) {
-        // triangle_number();
-        // fact();
-        // simple_numbers();
-        // calc();
-        equ();
+        triangle_number();
+        fact();
+        simple_numbers();
+        calc();
+        // equ(); - не доделал
     }
 
     public static void triangle_number() {
@@ -140,9 +140,15 @@ public class homework1 {
         String q = arr[0];
         String w = arr[1];
         String e = arr[2];
+        int a = 0;
+        int b = 0;
+        int res = 0;
         for (int i = 0; i < q.length(); i++) {
             if (q.charAt(i) == '?'){
-                System.out.println('+');
+                a = e.charAt(i);
+                b = w.charAt(i);
+                res = a - b;
+                
             }
         }
     }
