@@ -2,14 +2,19 @@ package Homework;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Set;
 
 public class homework1 {
     public static void main(String[] args) {
-        triangle_number();
-        fact();
-        simple_numbers();
-        calc();
-        // equ(); - не доделал
+        // triangle_number();
+        // fact();
+        // simple_numbers();
+        // calc();
+        /* equ(); - оказался выше моего понимания, 
+        с некоторыми вариантами справляется(?7 + 6? = 83), но некоторые нет(6? + ?7 = 83),
+        почему так происходит я понимаю, но как с такими случаями справиться ума не приложу
+        */
+        input_formul();
     }
 
     public static void triangle_number() {
@@ -132,23 +137,92 @@ public class homework1 {
         Scanner scanner = new Scanner(System.in);
         String equation = scanner.nextLine();
         equation = equation.replace(" ", "");
-        System.out.println(equation);
         equation = equation.replace("+", "=");
-        System.out.println(equation);
         String[] arr = equation.split("=");
-        System.out.println(Arrays.toString(arr));
-        String q = arr[0];
-        String w = arr[1];
-        String e = arr[2];
-        int a = 0;
-        int b = 0;
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = new StringBuilder(arr[i]).reverse().toString();
+        }
+        int k = 0;
+        for (int i = arr.length-1; i != -1 ; i--) {
+            String a = arr[i];
+            if (a.indexOf('?') != -1){
+                for (int j = 0; j < a.length() ; j++) {
+                    int res = 0;
+                    if (a.charAt(j) == '?'){
+                        if (i == 0){
+                            res = Character.getNumericValue(arr[2].charAt(j)) - Character.getNumericValue(arr[1].charAt(j));
+                        } else if (i == 1){
+                            res = Character.getNumericValue(arr[2].charAt(j)) - Character.getNumericValue(arr[0].charAt(j));
+                        } else {
+                            res = Character.getNumericValue(arr[0].charAt(j)) + Character.getNumericValue(arr[1].charAt(j));
+                        }
+                        if (k==1){
+                            if (i==0 || i ==1){
+                                res-=1;
+                            } else {
+                                res +=1;
+                            }
+                            k-=1;
+                        }
+                        if (res<0){
+                            res+=10;
+                            k+=1;
+                        } else if (res>=10){
+                            res-=10;
+                            k+=1;
+                        }
+                        a = a.replace("?", Integer.toString(res));
+                    }                    
+                }
+                arr[i] = a;
+            }
+        }
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = new StringBuilder(arr[i]).reverse().toString();
+        }
+        if (Integer.parseInt(arr[0]) + Integer.parseInt(arr[1]) == Integer.parseInt(arr[2])){
+            System.out.println(arr[0]+" + "+arr[1]+" = "+arr[2]);
+        }
+        else{
+            System.out.println("No variants");
+        }
+    }
+
+    public static void input_formul() {
+        System.out.println("Input equation");
+        Scanner scanner = new Scanner(System.in);
+        String equation = scanner.nextLine();
+        equation = equation.replace(" ", "").replace("+", "=");
+        String[] arr = equation.split("=");
+        Arrays.sort(arr);
         int res = 0;
-        for (int i = 0; i < q.length(); i++) {
-            if (q.charAt(i) == '?'){
-                a = e.charAt(i);
-                b = w.charAt(i);
-                res = a - b;
-                
+        int k = 1;
+        for (int i = 0; i < arr.length; i++) {
+            if (i == arr.length - 1){
+                res += InputNumber("Input number of "+ arr[i] + " =", k);
+            } else {
+                if (arr[i].equals(arr[i+1])){
+                    k+=1;
+                } else {
+                    res += InputNumber("Input number of "+ arr[i] + " =", k);
+                    k = 1;   
+                }
+            }
+            
+        }
+        System.out.println(res);
+    }
+    private static Integer InputNumber(String line, Integer key) {
+        int numb = 0;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(line);
+        while (true) {
+            scanner = new Scanner(System.in);
+            if (scanner.hasNextInt()) {
+                numb = scanner.nextInt();
+                return numb*key;
+            } else {
+                 System.out.println("It must be a number");
             }
         }
     }
